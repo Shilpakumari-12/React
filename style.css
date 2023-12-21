@@ -1,0 +1,160 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap");
+
+* {
+  position: relative;
+  box-sizing: border-box;
+}
+
+html {
+  background: #eee;
+  height: 100%;
+  font-family: "Lato", sans-serif;
+}
+
+body {
+  display: grid;
+  place-items: center;
+  min-height: 100%;
+}
+
+/* ---------------------------------- */
+
+.todo {
+  display: flex;
+  align-items: stretch;
+  gap: 1rem;
+  margin: 1rem;
+}
+.todo-main {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex: 1;
+
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 700;
+
+  &:after {
+    content: "";
+    display: inline-block;
+    height: 1em;
+    width: 1em;
+    border-radius: 50%;
+    border: solid 2px #aaa;
+    margin-left: auto;
+  }
+}
+
+.todo-main,
+.todo-delete {
+  box-shadow: 0 0.5rem 1rem hsla(0 0 0 / 0.25);
+}
+
+.todo-delete {
+  appearance: none;
+  background: #db4c3f;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+
+  svg {
+    fill: white;
+    width: 1.5em;
+    height: 1.5em;
+  }
+}
+
+/* ---------------------------------- */
+
+.todo[data-state] {
+  --duration: 0.3s;
+  transition: opacity var(--duration) linear;
+}
+
+.todo-main,
+.todo-delete {
+  transition: transform var(--duration) ease-in-out,
+    opacity var(--duration) ease-in-out;
+}
+
+.todo[data-state="unselected"] {
+  .todo-main {
+    transform: translateX(1.5rem);
+  }
+  .todo-delete {
+    transform: scale(0.5);
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.todo[data-state="selected"] {
+  .todo-main {
+    transform: none;
+  }
+  .todo-delete {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.todo[data-state="deleted"] {
+  --duration: 0.7s;
+  opacity: 0;
+
+  .todo-main {
+    animation: main-out var(--duration) ease-in;
+    @keyframes main-out {
+      30% {
+        transform: translateX(-10%);
+        animation-timing-function: ease-out;
+      }
+      70%,
+      100% {
+        opacity: 0;
+        transform: translateX(50%) scale(0.5);
+        animation-timing-function: ease-out;
+      }
+    }
+  }
+
+  .todo-delete {
+    opacity: 1;
+    transform: scale(0.1);
+    transition-duration: calc(var(--duration) / 2);
+  }
+}
+
+// [data-state] {
+//   &:before {
+//     position: absolute;
+//     bottom: 100%;
+//     left: 0;
+//     content: 'data-state: ' attr(data-state);
+//     background: #111;
+//     color: white;
+//     padding: .25rem;
+//     font-family: monospace;
+//   }
+// }
+
+button {
+  padding: 0.75rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: #adadad;
+  color: white;
+  font-weight: bold;
+  animation: scale-in 0.5s ease-out;
+
+  @keyframes scale-in {
+    from {
+      transform: scale(0);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+}
